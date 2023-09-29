@@ -49,7 +49,7 @@ const Modal = ({ setModal, animarModal, setAnimarModal, guardarGasto, gastoEdita
                     <input type="number" id='cantidad' placeholder='Añade la cantidad del gasto: ej. 300' value={cantidad} onChange={(e) => { setCantidad(Number(e.target.value)) }} />
                 </div>
                 <div className='campo'>
-                    <label htmlFor="categoria">Cantidad</label>
+                    <label htmlFor="categoria">Categoria</label>
                     <select name="categoria" id="categoria" value={categoria} onChange={(e) => { setCategoria(e.target.value) }} >
                         <option value="">-- Seleccione --</option>
                         <option value="reserva">Reserva</option>

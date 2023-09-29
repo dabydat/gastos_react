@@ -6,7 +6,7 @@ import IconoNuevoGasto from './assets/img/nuevo-gasto.svg'
 import ListadoGasto from './components/ListadoGasto';
 
 function App() {
-  const [gastos, setGastos] = useState([]);
+  const [gastos, setGastos] = useState(localStorage.getItem('gastos') ? JSON.parse(localStorage.getItem('gastos')) : []);
   const [presupuesto, setPresupuesto] = useState(Number(localStorage.getItem('presupuesto')) ?? 0);
   const [isValidPresupuesto, setIsValidPresupuesto] = useState(false);
 
@@ -20,11 +20,22 @@ function App() {
   }, [presupuesto]);
 
   useEffect(() => {
+    localStorage.setItem('gastos', JSON.stringify(gastos) ?? [])
+  }, [gastos]);
+
+  useEffect(() => {
     const presupuestoLS = Number(localStorage.getItem('presupuesto', presupuesto)) ?? 0
     if (presupuestoLS > 0) {
       setIsValidPresupuesto(true);
     }
-  }, [])
+  }, []);
+  
+  useEffect(() => {
+    const gastosLS = JSON.parse(localStorage.getItem('gastos', gastos)) ?? []
+    if (gastosLS > 0) {
+      setIsValidPresupuesto(true);
+    }
+  }, []);
 
 
 
@@ -53,8 +64,6 @@ function App() {
     } else {
       setGastos([...gastos, { ...gasto, id: generateId(), fecha: Date.now() }]);
     }
-
-    // localStorage.setItem('gastos', gastos)
 
     setAnimarModal(false);
     setTimeout(() => {
