@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Header from "./components/Header";
+import Filtros from "./components/Filtros";
 import Modal from "./components/Modal";
 import generateId from "./utils/generateId"
 import IconoNuevoGasto from './assets/img/nuevo-gasto.svg'
@@ -13,7 +14,10 @@ function App() {
   const [modal, setModal] = useState(false);
   const [animarModal, setAnimarModal] = useState(false);
 
-  const [gastoEditar, setGastoEditar] = useState({})
+  const [gastoEditar, setGastoEditar] = useState({});
+
+  const [filtro, setFiltro] = useState('');
+  const [gastosFiltrados, setGastosFiltrados] = useState([]);
 
   useEffect(() => {
     localStorage.setItem('presupuesto', presupuesto ?? 0)
@@ -29,13 +33,21 @@ function App() {
       setIsValidPresupuesto(true);
     }
   }, []);
-  
+
   useEffect(() => {
     const gastosLS = JSON.parse(localStorage.getItem('gastos', gastos)) ?? []
     if (gastosLS > 0) {
       setIsValidPresupuesto(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (filtro) {
+      // Filtrar gastos por categoria
+      const gastosFiltrados = gastos.filter( gasto => gasto.categoria === filtro);
+      setGastosFiltrados(gastosFiltrados);
+    }
+  }, [filtro]);
 
 
 
@@ -78,10 +90,10 @@ function App() {
 
   return (
     <div className={modal ? 'fijar' : ''}>
-      <Header gastos={gastos} presupuesto={presupuesto} setPresupuesto={setPresupuesto} isValidPresupuesto={isValidPresupuesto} setIsValidPresupuesto={setIsValidPresupuesto} />
+      <Header gastos={gastos} setGastos={setGastos} presupuesto={presupuesto} setPresupuesto={setPresupuesto} isValidPresupuesto={isValidPresupuesto} setIsValidPresupuesto={setIsValidPresupuesto} />
       {isValidPresupuesto &&
         (<>
-          <main><ListadoGasto gastos={gastos} setGastoEditar={setGastoEditar} eliminarGasto={eliminarGasto} /></main>
+          <main><Filtros filtro={filtro} setFiltro={setFiltro}/><ListadoGasto gastos={gastos} setGastoEditar={setGastoEditar} eliminarGasto={eliminarGasto} filtro={filtro} gastosFiltrados={gastosFiltrados}/></main>
           <div className='nuevo-gasto'><img src={IconoNuevoGasto} alt="icono nuevo gasto" onClick={handleNuevoGasto} /></div>
         </>)
       }

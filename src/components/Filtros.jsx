@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 
-const Filtros = () => {
+const Filtros = ({ filtro, setFiltro }) => {
     return (
         <div className='fitros sombra contenedor'>
-            <form>
+            <form className=''>
                 <div className='campo'>
-                    <label htmlFor="categoria">Categoria</label>
-                    <select name="categoria" id="categoria" value={categoria}>
-                        <option value="">-- Seleccione --</option>
+                    <label>Filtrar Gastos</label>
+                    <select value={filtro} onChange={e => setFiltro(e.target.value)}>
+                        <option value="">-- Todas las categorias --</option>
                         <option value="reserva">Reserva</option>
                         <option value="comida">Comida</option>
                         <option value="casa">Casa</option>
